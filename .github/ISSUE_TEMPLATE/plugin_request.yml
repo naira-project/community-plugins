@@ -1,0 +1,85 @@
+name: Plugin Request
+description: Propose a plugin you would like someone to build for Naira
+title: "[Plugin]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a plugin! Describe the tool you want to see in the Naira catalog and why.
+
+        Do you want to build the plugin yourself? You do not need an issue. Read [CONTRIBUTING.md](https://github.com/naira-project/community-plugins/blob/main/CONTRIBUTING.md) and open a pull request.
+        Problems with an existing plugin go to that plugin's own repository, linked in its manifest.
+
+  - type: input
+    id: tool
+    attributes:
+      label: Tool or Service
+      description: Which tool, service or API should the plugin connect? Add a link to its project page or API docs.
+      placeholder: "Langfuse (https://langfuse.com/docs/api)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What can you not see or connect today without this plugin? Who is affected (AI engineer, application developer, platform engineer)?
+      placeholder: "Our prompts and traces live in Langfuse, but nobody can see which deployments use which prompt..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: collects
+    attributes:
+      label: What Should It Collect?
+      description: Which assets should appear as nodes in the catalog, and which relations should connect them to existing nodes (models, endpoints, deployments, datasets, repositories)?
+      placeholder: |
+        Nodes: prompts, prompt versions
+        Relations: deployment -> uses -> prompt, prompt -> targets -> model
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which plugin categories fit? Pick up to 3.
+      multiple: true
+      options:
+        - ai-gateway
+        - inference
+        - model-registry
+        - data-catalog
+        - vector-store
+        - mcp
+        - gitops
+        - source-control
+        - observability
+        - cloud-ai-service
+        - kubernetes
+        - governance
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: access
+    attributes:
+      label: Access and Permissions
+      description: How would the plugin read the data (REST API, Kubernetes API, SDK, file)? Which credentials or read permissions would it need?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Existing integrations in other tools, sample API responses, screenshots or references.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched the plugin index and existing issues, and this plugin has not been requested or listed before.
+          required: true
+        - label: I am willing to help build or test this plugin.

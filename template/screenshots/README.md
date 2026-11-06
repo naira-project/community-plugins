@@ -1,0 +1,1 @@
+Put screenshots here (PNG, JPG or WebP, at most 1 MB each, at most 6 files) and list them under `spec.screenshots` in `naira-plugin.yaml`. Show the plugin's nodes and relations in Naira. Remove this file in your plugin folder.

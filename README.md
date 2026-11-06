@@ -1,39 +1,91 @@
-# SAP Repository Template
+# Naira Community Plugins
 
-Default templates for SAP open source repositories, including LICENSE, .reuse/dep5, Code of Conduct, etc... All repositories on github.com/SAP will be created based on this template.
+The plugin index for [Naira](https://github.com/naira-project/naira), the open-source AI Engineering Hub for AI and cloud-native teams.
 
-## To-Do
+Each plugin is a container image that serves the Naira plugin gRPC contract and writes nodes and relations into the catalog graph.
 
-In case you are the maintainer of a new SAP open source project, these are the steps to do with the template files:
+This repository does not hold plugin code, except for core maintainer developed plugins. Each plugin lives in its owner's repository and registry. This repository holds one folder per plugin with a manifest (`naira-plugin.yaml`) that points to a digest-pinned image, plus an icon, screenshots and a short description. The Naira website catalog is generated from these folders.
 
-- Check if the default license (Apache 2.0) also applies to your project. A license change should only be required in exceptional cases. If this is the case, please change the [license file](LICENSE).
-- Enter the correct metadata for the REUSE tool. See our [wiki page](https://wiki.one.int.sap/wiki/display/ospodocs/Using+the+Reuse+Tool+of+FSFE+for+Copyright+and+License+Information) for details how to do it. You can find an initial .reuse/dep5 file to build on. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository and be sure to run the REUSE tool to validate that the metadata is correct.
-- Adjust the contribution guidelines (e.g. add coding style guidelines, pull request checklists, different license if needed etc.)
-- Add information about your project to this README (name, description, requirements etc). Especially take care for the <your-project> placeholders - those ones need to be replaced with your project name. See the sections below the horizontal line and [our guidelines on our wiki page](https://wiki.one.int.sap/wiki/pages/viewpage.action?pageId=3564976048#GuidelinesforGitHubHealthfiles(Readme,Contributing,CodeofConduct)-Readme.md) what is required and recommended.
-- Adjust the AGENTS.md file for the corresponding repository.
-- Remove all content in this README above and including the horizontal line ;)
+> **Alpha.** The manifest schema is `naira.dev/v1alpha1` and will change while the plugin contract evolves. Pin the Naira version you test against in `nairaApiVersions`.
 
-***
+## Plugin index
 
-# Our new open source project
+### Official
 
-## About this project
+Built and maintained by the Naira maintainers in [naira-project/naira](https://github.com/naira-project/naira/tree/main/plugins/cmd). They ship with the Naira Helm chart.
 
-*Insert a short description of your project here...*
+| Plugin | Connects |
+|---|---|
+| [bedrock](https://github.com/naira-project/naira/tree/main/plugins/cmd/bedrock) | AWS Bedrock foundation models and inference endpoints |
+| [depl_calls_svc](https://github.com/naira-project/naira/tree/main/plugins/cmd/depl_calls_svc) | Kubernetes Deployments to the Services they call |
+| [depl_uses_litellm](https://github.com/naira-project/naira/tree/main/plugins/cmd/depl_uses_litellm) | Kubernetes Deployments to the models they reach through LiteLLM keys |
+| [depl_uses_thalamus](https://github.com/naira-project/naira/tree/main/plugins/cmd/depl_uses_thalamus) | Kubernetes Deployments to the models they consume through Thalamus |
+| [fluxcd](https://github.com/naira-project/naira/tree/main/plugins/cmd/fluxcd) | Flux sources, Kustomizations and Helm charts |
+| [github](https://github.com/naira-project/naira/tree/main/plugins/cmd/github) | Deployments to their source repositories, with CODEOWNERS ownership |
+| [litellm](https://github.com/naira-project/naira/tree/main/plugins/cmd/litellm) | LiteLLM models and inference endpoints |
+| [mcp_servers](https://github.com/naira-project/naira/tree/main/plugins/cmd/mcp_servers) | MCP servers and their tools |
+| [mlflow](https://github.com/naira-project/naira/tree/main/plugins/cmd/mlflow) | MLflow registered models |
+| [openai_api_models](https://github.com/naira-project/naira/tree/main/plugins/cmd/openai_api_models) | Models from any OpenAI-compatible API |
+| [openmetadata](https://github.com/naira-project/naira/tree/main/plugins/cmd/openmetadata) | OpenMetadata datasets |
+| [tech_radar](https://github.com/naira-project/naira/tree/main/plugins/cmd/tech_radar) | An admin-managed technology radar |
+| [thalamus](https://github.com/naira-project/naira/tree/main/plugins/cmd/thalamus) | Models served by Thalamus |
 
-## Requirements and Setup
+### Verified and community
 
-*Insert a short description what is required to get your project running...*
+Listed from the folders in [`plugins/`](plugins/).
 
-## Support, Feedback, Contributing
+| Plugin | Tier | Category | Maintainers | Description |
+|---|---|---|---|---|
+| _No plugins yet. [Add the first one.](CONTRIBUTING.md)_ | | | | |
 
-This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/naira-project/<your-project>/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+Tiers:
 
-## Security / Disclosure
-If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/naira-project/<your-project>/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
+- **Official**: built and maintained by the Naira maintainers.
+- **Verified**: maintained by a vendor or partner whose namespace ownership is proven. The verification process is not defined yet.
+- **Community**: maintained by the contributor, best effort, no guarantees from the Naira project. Review the declared permissions and the source before you install.
 
-## Code of Conduct
+## Repository layout
 
-Please refer to our [Code of Conduct](https://github.com/naira-project/.github/blob/main/CODE_OF_CONDUCT.md) for information on the expected conduct for contributing to Platform Mesh.
+```
+plugins/
+  io.github.<owner>.<plugin>/   one folder per plugin, named after metadata.name
+    naira-plugin.yaml           manifest (required)
+    README.md                   what it collects, configuration, permissions (required)
+    icon.svg | icon.png         icon (required)
+    screenshots/                up to 6 screenshots (recommended)
+schema/
+  naira-plugin.v1alpha1.schema.json   JSON Schema for the manifest
+template/                       copy this folder to start a new entry
+```
+
+## Using a plugin
+
+1. Pick a plugin from the index and read its `README.md`, especially the declared permissions and configuration.
+2. Check that your Naira version is inside the plugin's `nairaApiVersions` range.
+3. Add the plugin as a sidecar entry under `catalog.plugins` in the Naira Helm chart values, with its image, port, schedule and environment.
+
+**Known gap:** the Naira Helm chart currently prefixes every plugin image with one global registry (`image.registry`) and accepts tags, not digests. Community plugin images hosted in other registries and pinned by digest cannot be configured without a chart change yet.
+
+## Contributing a plugin
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md). In short: build and publish your plugin in your own repository, copy [`template/`](template/) to `plugins/<your-plugin-name>/`, fill in the manifest and README, and open a pull request that touches only that folder.
+
+To propose a plugin you would like someone to build, open an issue.
+
+## Support, feedback, contributing
+
+Questions, ideas and bug reports for this index go to [GitHub issues](https://github.com/naira-project/community-plugins/issues). Problems with a specific community plugin go to that plugin's own repository, linked in its manifest.
+
+## Security / disclosure
+
+If you find a security problem in this repository or in a listed plugin, follow the [security policy](https://github.com/naira-project/.github/blob/main/SECURITY.md).
+
+## Code of conduct
+
+Everyone in the project community follows the [Code of Conduct](https://github.com/SAP/.github/blob/main/CODE_OF_CONDUCT.md).
+
+## Licensing
+
+The content of this repository is licensed under [Apache 2.0](LICENSE). Each plugin's source and image are licensed by their owners as declared in `spec.license`.
 
 <p align="center"><img alt="Bundesministerium für Wirtschaft und Energie (BMWE)-EU funding logo" src="https://apeirora.eu/assets/img/BMWK-EU.png" width="400"/></p>

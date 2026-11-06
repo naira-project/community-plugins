@@ -1,41 +1,36 @@
 ## Description
 
-<!-- What does this PR do? Why is it needed? Please link the related Issues-->
+<!-- What does this PR add or change? Link the related issue, if any. -->
 
-## Type of Change
+## Type of change
 
-- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
-- [ ] ✨ New feature (non-breaking change which adds functionality)
-- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] 📝 Documentation update
-- [ ] 🔧 Refactoring (no functional changes)
-- [ ] 🏗️ Infrastructure / CI / Helm
+- [ ] 🧩 New plugin entry
+- [ ] ⬆️ Update of an existing plugin entry (new version, digest or metadata)
+- [ ] 📝 Documentation
+- [ ] 📐 Schema or template
+- [ ] 🏗️ CI / repository setup
 
-## How Has This Been Tested?
+## Plugin entry checklist
 
-<!-- Describe the tests that you ran. Need update when project progresses -->
+<!-- Only for new or updated plugin entries. See CONTRIBUTING.md. -->
 
-- [ ] `go test ./...` passes
-- [ ] `helm lint` passes
-- [ ] Manual testing via Docker Compose
-- [ ] Manual testing on Kubernetes
+- [ ] This PR changes one plugin folder, plus its README table row and CODEOWNERS line
+- [ ] The folder name equals `metadata.name`, and the namespace is mine (`io.github.<my-login-or-org>`)
+- [ ] `naira-plugin.yaml` validates against `schema/naira-plugin.v1alpha1.schema.json`
+- [ ] `spec.image` is pinned by digest and publicly pullable
+- [ ] `metadata.version` is bumped if the digest changed
+- [ ] The image runs as non-root and only reads from the systems it connects to
+- [ ] Every environment variable and permission is declared in the manifest and README
+- [ ] Icon and screenshots are mine to publish and within the size limits
+- [ ] All commits are signed off (DCO)
 
-## Checklist
+## Evidence
 
-- [ ] My code follows the project's coding standards ([AGENTS.md](AGENTS.md))
-- [ ] I have added tests that prove my fix/feature works
-- [ ] New and existing unit tests pass locally
-- [ ] I have updated the documentation (if applicable)
-- [ ] My changes generate no new warnings
+<!-- Show the plugin running: Naira version, plugin version, and a screenshot or
+     API output (for example GET /v1/nodes) with the nodes and relations it wrote. -->
 
 <!-- Uncomment when AI was used for this PR
- Describe how and for what AI was used in this PR
-## AI Usage
+## AI usage
 
-
-
--->
-<!-- Add screenshots for UI changes.
-
-## Screenshots (if applicable)
+Describe how and for what AI was used in this PR.
 -->

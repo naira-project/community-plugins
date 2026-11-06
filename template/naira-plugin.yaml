@@ -1,0 +1,46 @@
+# Copy this folder to plugins/<metadata.name>/ and replace every value.
+# Schema: ../schema/naira-plugin.v1alpha1.schema.json (alpha, may change).
+apiVersion: naira.dev/v1alpha1
+kind: Plugin
+metadata:
+  # Reverse-DNS name, equal to the folder name. Community tier: io.github.<your-login-or-org>.<plugin>
+  name: io.github.jdoe.qdrant
+  version: 0.1.0
+spec:
+  displayName: Qdrant
+  description: Collects Qdrant collections and links them to the models that write embeddings into them.
+  tier: community
+  categories: [vector-store]
+  # Pinned by digest. Tags are not accepted.
+  image: ghcr.io/jdoe/naira-plugin-qdrant@sha256:0000000000000000000000000000000000000000000000000000000000000000
+  nairaApiVersions: ">=0.1.2 <0.2.0"
+  source: https://github.com/jdoe/naira-plugin-qdrant
+  homepage: https://github.com/jdoe/naira-plugin-qdrant
+  license: Apache-2.0
+  maintainers:
+    - name: Jane Doe
+      github: jdoe
+  icon: icon.svg
+  screenshots:
+    - path: screenshots/graph.png
+      caption: Qdrant collections linked to embedding models in the Naira graph
+  collects:
+    nodeKinds: [dataset, model]
+    relationKinds: [derived_from]
+  configuration:
+    env:
+      - name: QDRANT_URL
+        description: Base URL of the Qdrant HTTP API.
+        required: true
+      - name: QDRANT_API_KEY
+        description: Read-only API key.
+        required: false
+        secret: true
+      - name: PATH_PREFIX
+        description: Prefix for node paths, to tell several Qdrant instances apart.
+        required: false
+        default: qdrant
+  permissions:
+    # kubernetes: omit when the plugin does not read the cluster
+    network:
+      - Qdrant HTTP API (read-only)
