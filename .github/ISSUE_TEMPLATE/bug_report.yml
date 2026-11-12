@@ -16,13 +16,6 @@ body:
     validations:
       required: true
   - type: textarea
-    id: observation
-    attributes:
-      label: Actual Behavior
-      description: What did you see happen?
-    validations:
-      required: true
-  - type: textarea
     id: expected
     attributes:
       label: Expected Behavior
